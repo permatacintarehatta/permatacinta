@@ -70,7 +70,7 @@ body {
     background-color: #00487a;
 }
 
-/* --- Section Styling (REVISED) --- */
+/* --- Section Styling --- */
 section {
     margin-bottom: 2.5rem;
 }
@@ -134,18 +134,19 @@ section {
     font-weight: 500;
 }
 
-/* --- Layanan & Publikasi (REVISED) --- */
-.service-grid {
+/* --- Layanan & Publikasi (REVISED for Spacing & Uniformity) --- */
+.service-grid, .publication-grid {
     display: grid;
     gap: 1rem;
+    margin-top: 1.5rem; /* DITAMBAHKAN: Memberi jarak dari headline */
+}
+
+.service-grid {
     grid-template-columns: repeat(2, 1fr);
 }
 
 .publication-grid {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr); /* REVISI: Menggunakan grid agar ukuran seragam */
 }
 
 .service-button, .publication-button {
@@ -162,9 +163,8 @@ section {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    height: 110px; /* Memberi tinggi tetap agar seragam */
+    height: 110px; 
 }
-
 
 .service-button:hover, .publication-button:hover {
     transform: translateY(-5px);
@@ -190,6 +190,7 @@ section {
     color: var(--secondary-color);
     font-weight: 500;
 }
+
 
 /* --- Footer --- */
 .main-footer {
