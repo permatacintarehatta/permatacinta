@@ -70,7 +70,7 @@ body {
     background-color: #00487a;
 }
 
-/* --- Section Styling --- */
+/* --- Section Styling (REVISED) --- */
 section {
     margin-bottom: 2.5rem;
 }
@@ -84,6 +84,12 @@ section {
 
 .section-header h2 {
     font-size: 1.25rem;
+}
+
+/* Khusus untuk section Layanan & Publikasi, judulnya di tengah */
+.services-section h2, .publications-section h2 {
+    width: 100%;
+    text-align: center;
 }
 
 .section-header a {
@@ -128,25 +134,24 @@ section {
     font-weight: 500;
 }
 
-/* --- Layanan & Publikasi --- */
-.service-grid, .publication-grid {
+/* --- Layanan & Publikasi (REVISED) --- */
+.service-grid {
     display: grid;
     gap: 1rem;
-}
-
-.service-grid {
     grid-template-columns: repeat(2, 1fr);
 }
 
 .publication-grid {
-    grid-template-columns: repeat(1, 1fr); /* 1 kolom untuk publikasi agar lebih besar */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1rem;
 }
-
 
 .service-button, .publication-button {
     background-color: var(--card-background);
     border-radius: 12px;
-    padding: 1.2rem;
+    padding: 1rem;
     text-align: center;
     text-decoration: none;
     color: var(--text-color);
@@ -155,12 +160,9 @@ section {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-}
-
-.publication-button {
-    flex-direction: row; /* Icon dan teks bersebelahan */
-    justify-content: flex-start;
+    height: 110px; /* Memberi tinggi tetap agar seragam */
 }
 
 
@@ -175,19 +177,15 @@ section {
     color: var(--primary-color);
 }
 
-.publication-button .material-symbols-outlined {
-    font-size: 2rem;
-    margin-right: 1rem;
-}
-
 .service-button span, .publication-button span {
     font-weight: 500;
+    font-size: 0.8rem;
 }
 
 .see-more-link {
     display: block;
-    text-align: right;
-    margin-top: 1rem;
+    text-align: center;
+    margin-top: 1.5rem;
     text-decoration: none;
     color: var(--secondary-color);
     font-weight: 500;
