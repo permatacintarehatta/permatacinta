@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PERMATA CINTA - Beranda</title>
-    <link rel="stylesheet" href="style.css">
-    
+    <title>PERMATA CINTA</title> <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
@@ -15,88 +12,121 @@
 </head>
 <body>
 
-    <main class="content">
-        <header class="main-header">
-            <img src="img/header.png" alt="Header Aplikasi PERMATA CINTA">
-            <h1>PERMATA CINTA</h1>
-            <p class="description">
-                <b>Permata Cinta</b> (Pengelolaan Informasi Ketatausahaan Untuk Menciptakan Tertib Administrasi) merupakan portal yang disediakan oleh Sub Bagian Tata Usaha RSUD dr. Rehatta untuk memudahkan Civitas Hospitalia dalam mengakses layanan dan informasi seputar ketatausahaan dan kepegawaian.
-            </p>
-            <a href="#" class="button-primary">Panduan Penggunaan</a>
-        </header>
+    <div class="pages-container">
 
-        <section class="news-section">
-            <div class="section-header">
-                <h2>BERITA TERBARU</h2>
-                <a href="#">Lihat Semua</a>
-            </div>
-            <div class="news-container">
-            </div>
-        </section>
+        <div id="beranda-page" class="page">
+            <main class="content">
+                <header class="main-header">
+                    <img src="img/header.png" alt="Header Aplikasi PERMATA CINTA">
+                    <h1>PERMATA CINTA</h1>
+                    <p class="description">
+                        <b>Permata Cinta</b> (Pengelolaan Informasi Ketatausahaan...)
+                    </p>
+                    <a href="#" class="button-primary">Panduan Penggunaan</a>
+                </header>
 
-        <section class="services-section">
-            <h2>LAYANAN</h2>
-            <div class="service-grid">
-                <a href="#" class="service-button">
-                    <span class="material-symbols-outlined">badge</span>
-                    <span>Kepegawaian</span>
-                </a>
-                <a href="#" class="service-button">
-                    <span class="material-symbols-outlined">directions_car</span>
-                    <span>Pesan Kendaraan</span>
-                </a>
-                <a href="#" class="service-button">
-                    <span class="material-symbols-outlined">local_gas_station</span>
-                    <span>Permintaan BBM</span>
-                </a>
-                <a href="#" class="service-button">
-                    <span class="material-symbols-outlined">report</span>
-                    <span>Pengaduan</span>
-                </a>
-            </div>
-            <a href="#" class="see-more-link">Selengkapnya</a>
-        </section>
+                <section class="news-section">
+                    <div class="section-header">
+                        <h2>BERITA TERBARU</h2>
+                        <a href="#">Lihat Semua</a>
+                    </div>
+                    <div class="news-container"></div>
+                </section>
 
-        <section class="publications-section">
-            <h2>PUBLIKASI</h2>
-            <div class="publication-grid">
-                <a href="#" class="publication-button">
-                    <span class="material-symbols-outlined">mail</span>
-                    <span>Surat Edaran</span>
-                </a>
-                <a href="#" class="publication-button">
-                    <span class="material-symbols-outlined">area_chart</span>
-                    <span>Infografis</span>
-                </a>
-                <a href="#" class="publication-button">
-                    <span class="material-symbols-outlined">checklist</span>
-                    <span>SOP</span>
-                </a>
-            </div>
-            <a href="#" class="see-more-link">Selengkapnya</a>
-        </section>
-    </main>
+                <section class="services-section">
+                    <h2>LAYANAN</h2>
+                    <div class="service-grid">
+                        <a href="#" class="service-button">...</a>
+                        <a href="#" class="service-button">...</a>
+                        <a href="#" class="service-button">...</a>
+                        <a href="#" class="service-button">...</a>
+                    </div>
+                    <a href="#" class="see-more-link page-link" data-page="layanan-page">Selengkapnya</a>
+                </section>
 
-    <footer class="main-footer">
-        <p><b>PERMATA CINTA</b></p>
-        <p>RSUD dr. REHATTA - Jl. Raya Kelet-Jepara KM 37, Kelet, Keling, Jepara.</p>
-        <p>Email : umpegkelet@gmail.com</p>
-    </footer>
+                <section class="publications-section">
+                    <h2>PUBLIKASI</h2>
+                    <div class="publication-grid">
+                       <a href="#" class="publication-button">...</a>
+                       <a href="#" class="publication-button">...</a>
+                       <a href="#" class="publication-button">...</a>
+                    </div>
+                    <a href="#" class="see-more-link">Selengkapnya</a>
+                </section>
+            </main>
 
-    <nav class="bottom-nav">
-        <a href="#" class="nav-item active">
+            <footer class="main-footer">
+                <p><b>PERMATA CINTA</b></p>
+                <p>RSUD dr. REHATTA...</p>
+                <p>Email : umpegkelet@gmail.com</p>
+            </footer>
+        </div>
+
+        <div id="layanan-page" class="page hidden">
+            <header class="page-header">
+                <span class="material-symbols-outlined">apps</span>
+                <h1>Layanan</h1>
+            </header>
+            <main class="content">
+                <div class="layanan-list">
+                    <a href="#" class="layanan-item">
+                        <span class="material-symbols-outlined icon">badge</span>
+                        <div class="text">
+                            <h3>Kepegawaian</h3>
+                            <p>Informasi, data, dan layanan terkait kepegawaian.</p>
+                        </div>
+                        <span class="material-symbols-outlined chevron">chevron_right</span>
+                    </a>
+                    <a href="#" class="layanan-item">
+                        <span class="material-symbols-outlined icon">directions_car</span>
+                        <div class="text">
+                            <h3>Pesan Kendaraan Dinas</h3>
+                            <p>Formulir online untuk pemesanan kendaraan dinas.</p>
+                        </div>
+                        <span class="material-symbols-outlined chevron">chevron_right</span>
+                    </a>
+                    <a href="#" class="layanan-item">
+                        <span class="material-symbols-outlined icon">local_gas_station</span>
+                        <div class="text">
+                            <h3>Permintaan BBM</h3>
+                            <p>Prosedur dan formulir untuk permintaan BBM.</p>
+                        </div>
+                        <span class="material-symbols-outlined chevron">chevron_right</span>
+                    </a>
+                     <a href="#" class="layanan-item">
+                        <span class="material-symbols-outlined icon">report</span>
+                        <div class="text">
+                            <h3>Pengaduan</h3>
+                            <p>Sampaikan pengaduan Anda terkait layanan kami.</p>
+                        </div>
+                        <span class="material-symbols-outlined chevron">chevron_right</span>
+                    </a>
+                    <a href="#" class="layanan-item">
+                        <span class="material-symbols-outlined icon">calendar_month</span>
+                        <div class="text">
+                            <h3>Pengajuan Cuti Online</h3>
+                            <p>Proses pengajuan cuti tahunan, sakit, atau lainnya.</p>
+                        </div>
+                        <span class="material-symbols-outlined chevron">chevron_right</span>
+                    </a>
+                </div>
+            </main>
+        </div>
+
+    </div> <nav class="bottom-nav">
+        <a href="#" class="nav-item active page-link" data-page="beranda-page">
             <span class="material-symbols-outlined">home</span>
             <span>Beranda</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="#" class="nav-item page-link" data-page="layanan-page">
             <span class="material-symbols-outlined">apps</span>
             <span>Layanan</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="#" class="nav-item page-link" data-page="publikasi-page">
             <span class="material-symbols-outlined">feed</span>
             <span>Publikasi</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="#" class="nav-item page-link" data-page="konsultasi-page">
             <span class="material-symbols-outlined">support_agent</span>
             <span>Konsultasi</span>
         </a>
