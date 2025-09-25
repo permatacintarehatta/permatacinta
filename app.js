@@ -14,10 +14,10 @@ window.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // --- 2. AMBIL DATA BERITA (LOGIKA LAMA) ---
+    // --- 2. AMBIL DATA BERITA ---
     fetchNews();
 
-    // --- 3. LOGIKA NAVIGASI HALAMAN (BARU) ---
+    // --- 3. LOGIKA NAVIGASI HALAMAN ---
     const pageLinks = document.querySelectorAll('.page-link');
     const pages = document.querySelectorAll('.page');
     const navItems = document.querySelectorAll('.nav-item');
@@ -25,15 +25,15 @@ window.addEventListener('DOMContentLoaded', () => {
     // Fungsi untuk menampilkan halaman yang dipilih dan menyembunyikan yang lain
     function navigateTo(pageId) {
         pages.forEach(page => {
-            // Jika ID halaman cocok, tampilkan. Jika tidak, sembunyikan.
             page.classList.toggle('hidden', page.id !== pageId);
         });
+        // Scroll ke atas setiap kali pindah halaman
+        window.scrollTo(0, 0);
     }
 
     // Fungsi untuk memperbarui status 'active' di navigasi bawah
     function updateActiveNav(targetPage) {
         navItems.forEach(item => {
-            // Jika data-page pada item nav cocok, beri kelas 'active'
             item.classList.toggle('active', item.dataset.page === targetPage);
         });
     }
@@ -41,11 +41,10 @@ window.addEventListener('DOMContentLoaded', () => {
     // Tambahkan event listener untuk semua link navigasi
     pageLinks.forEach(link => {
         link.addEventListener('click', (event) => {
-            event.preventDefault(); // Mencegah link pindah halaman secara default
+            event.preventDefault(); 
             
             const targetPage = link.dataset.page;
             
-            // Hentikan jika target halaman tidak ada/belum dibuat
             if (!document.getElementById(targetPage)) {
                 console.warn(`Halaman "${targetPage}" belum dibuat.`);
                 return;
@@ -66,7 +65,7 @@ function fetchNews() {
     const newsContainer = document.querySelector('.news-container');
     if (!newsContainer) return;
 
-    newsContainer.innerHTML = ''; // Kosongkan kontainer
+    newsContainer.innerHTML = ''; 
 
     fetch('/api/berita')
         .then(response => response.json())
