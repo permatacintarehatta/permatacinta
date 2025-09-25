@@ -24,9 +24,8 @@ body {
 }
 
 .content {
-    /* Padding bawah agar konten tidak tertutup navigasi bawah */
+    /* REVISI: Menghapus padding-bottom dari sini */
     padding: 1rem;
-    padding-bottom: 100px; 
 }
 
 /* --- Header --- */
@@ -134,11 +133,11 @@ section {
     font-weight: 500;
 }
 
-/* --- Layanan & Publikasi (REVISED for Spacing & Uniformity) --- */
+/* --- Layanan & Publikasi --- */
 .service-grid, .publication-grid {
     display: grid;
     gap: 1rem;
-    margin-top: 1.5rem; /* DITAMBAHKAN: Memberi jarak dari headline */
+    margin-top: 1.5rem; 
 }
 
 .service-grid {
@@ -146,7 +145,7 @@ section {
 }
 
 .publication-grid {
-    grid-template-columns: repeat(3, 1fr); /* REVISI: Menggunakan grid agar ukuran seragam */
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .service-button, .publication-button {
@@ -192,13 +191,15 @@ section {
 }
 
 
-/* --- Footer --- */
+/* --- Footer (REVISED) --- */
 .main-footer {
     background-color: var(--primary-color);
     color: white;
     text-align: center;
     padding: 1.5rem;
     font-size: 0.8rem;
+    /* Memberi margin agar tidak tertutup navigasi bawah */
+    margin-bottom: 70px; 
 }
 
 .main-footer p {
