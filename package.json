@@ -1,6 +1,8 @@
 {
   "type": "module",
   "dependencies": {
-    "@vercel/postgres": "^0.5.1"
+    "@vercel/postgres": "^0.5.1",
+    "sharp": "^0.33.2",
+    "formidable": "^3.5.1"
   }
 }
