@@ -122,9 +122,16 @@ section {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     overflow: hidden;
     cursor: pointer;
-    flex-shrink: 0;
-    width: 180px;
+    flex-shrink: 0; /* Untuk horizontal scroll */
+    width: 180px; /* Untuk horizontal scroll */
 }
+
+/* Penyesuaian untuk .news-card di dalam .news-grid-container */
+.news-grid-container .news-card {
+    width: 100%;
+    flex-shrink: 1;
+}
+
 
 .news-card img {
     width: 100%;
@@ -146,17 +153,19 @@ section {
     grid-template-columns: 1fr;
 }
 
-@media (min-width: 550px) {
+/* PERBAIKAN: Mengubah breakpoint agar 2 & 3 kolom muncul lebih cepat */
+@media (min-width: 480px) {
     .news-grid-container {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (min-width: 850px) {
+@media (min-width: 768px) {
     .news-grid-container {
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
 
 /* --- Layanan & Publikasi --- */
 .service-grid, .publication-grid {
