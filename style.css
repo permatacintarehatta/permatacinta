@@ -200,7 +200,7 @@ section {
     text-align: center;
     padding: 1.5rem;
     font-size: 0.8rem;
-    margin-bottom: 70px; 
+    /* REVISI: Margin bawah dihapus dari sini */
 }
 
 .main-footer p {
@@ -243,6 +243,8 @@ section {
 /* --- Page Navigation System --- */
 .page {
     animation: fadeIn 0.3s ease-in-out;
+    /* REVISI: Menambahkan padding bawah untuk memberi ruang dari navigasi */
+    padding-bottom: 80px;
 }
 
 .page.hidden {
