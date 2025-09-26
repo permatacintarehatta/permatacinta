@@ -1,17 +1,42 @@
+// File: app.js
+
 window.addEventListener('DOMContentLoaded', () => {
-    // --- Inisialisasi semua modul ---
+
+    // --- DEKLARASI VARIABEL & FUNGSI GLOBAL ---
+    const pages = document.querySelectorAll('.page');
+    const navItems = document.querySelectorAll('.nav-item');
+
+    // Fungsi untuk menampilkan halaman yang dipilih dan menyembunyikan yang lain
+    // Dibuat di sini agar bisa diakses oleh semua fungsi setup
+    function navigateTo(pageId) {
+        pages.forEach(page => {
+            page.classList.toggle('hidden', page.id !== pageId);
+        });
+        window.scrollTo(0, 0);
+    }
+
+    // Fungsi untuk memperbarui status 'active' di navigasi bawah
+    function updateActiveNav(targetPage) {
+        navItems.forEach(item => {
+            item.classList.toggle('active', item.dataset.page === targetPage);
+        });
+    }
+
+    // --- INISIALISASI SEMUA MODUL ---
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js')
             .then(reg => console.log('ServiceWorker registration successful'))
             .catch(err => console.log('ServiceWorker registration failed:', err));
     }
+    
     fetchNews();
-    setupPageNavigation();
-    setupAdminAuth();
+    setupPageNavigation(navigateTo, updateActiveNav); // Kirim fungsi sebagai argumen
+    setupAdminAuth(navigateTo); // Kirim fungsi sebagai argumen
     setupBeritaForm();
 });
 
-// --- FUNGSI-FUNGSI ---
+
+// --- FUNGSI-FUNGSI SETUP ---
 
 function fetchNews() {
     const newsContainer = document.querySelector('.news-container');
@@ -23,7 +48,6 @@ function fetchNews() {
         .then(response => response.json())
         .then(data => {
             if (!Array.isArray(data)) {
-                // Jika data bukan array, tampilkan pesan error dan hentikan
                 console.error('Data fetched is not an array:', data);
                 newsContainer.innerHTML = '<p>Gagal memuat berita (format data salah).</p>';
                 return;
@@ -31,7 +55,6 @@ function fetchNews() {
             data.forEach(berita => {
                 const newsCard = document.createElement('div');
                 newsCard.className = 'news-card';
-                // Menggunakan thumbnail_url dari database
                 newsCard.innerHTML = `<img src="${berita.thumbnail_url}" alt="${berita.judul}"><h3>${berita.judul}</h3>`;
                 newsContainer.appendChild(newsCard);
             });
@@ -42,23 +65,8 @@ function fetchNews() {
         });
 }
 
-function setupPageNavigation() {
+function setupPageNavigation(navigateTo, updateActiveNav) {
     const pageLinks = document.querySelectorAll('.page-link');
-    const pages = document.querySelectorAll('.page');
-    const navItems = document.querySelectorAll('.nav-item');
-
-    function navigateTo(pageId) {
-        pages.forEach(page => {
-            page.classList.toggle('hidden', page.id !== pageId);
-        });
-        window.scrollTo(0, 0);
-    }
-
-    function updateActiveNav(targetPage) {
-        navItems.forEach(item => {
-            item.classList.toggle('active', item.dataset.page === targetPage);
-        });
-    }
 
     pageLinks.forEach(link => {
         link.addEventListener('click', (event) => {
@@ -75,10 +83,12 @@ function setupPageNavigation() {
         });
     });
 
+    // Tampilkan halaman Beranda saat pertama kali dimuat
     navigateTo('beranda-page');
 }
 
-function setupAdminAuth() {
+// REVISI DI FUNGSI INI
+function setupAdminAuth(navigateTo) {
     const openBtn = document.getElementById('open-admin-berita-button');
     const closeBtn = document.getElementById('close-pin-button');
     const pinPopup = document.getElementById('pin-popup');
@@ -105,24 +115,15 @@ function setupAdminAuth() {
         e.preventDefault();
         if (pinInput.value === correctPin) {
             pinPopup.classList.add('hidden');
-            
-            // Cari link navigasi ke halaman admin berita dan simulasikan klik
-            const adminBeritaLink = document.querySelector('.page-link[data-page="admin-berita-page"]');
-            if (adminBeritaLink) {
-                 // Navigasi manual karena admin-berita-page tidak ada di bottom nav
-                const pages = document.querySelectorAll('.page');
-                pages.forEach(page => {
-                    page.classList.toggle('hidden', page.id !== 'admin-berita-page');
-                });
-                window.scrollTo(0, 0);
-            }
+            // --- INI PERBAIKANNYA ---
+            // Langsung panggil fungsi navigasi, bukan mensimulasikan klik.
+            navigateTo('admin-berita-page');
         } else {
             pinError.classList.remove('hidden');
             pinInput.select();
         }
     });
 
-    // Sembunyikan popup saat area gelap di luar konten diklik
     pinPopup.addEventListener('click', (event) => {
         if (event.target === pinPopup) {
             pinPopup.classList.add('hidden');
@@ -155,6 +156,5 @@ function setupBeritaForm() {
     beritaForm.addEventListener('submit', (e) => {
         e.preventDefault();
         alert('Fitur simpan berita belum terhubung ke backend!');
-        // Nanti di sini kita akan panggil fungsi upload gambar dan simpan data
     });
 }
