@@ -5,8 +5,12 @@ window.addEventListener('DOMContentLoaded', () => {
     // --- 1. REGISTRASI SERVICE WORKER ---
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js')
-            .then(registration => console.log('ServiceWorker registration successful:', registration.scope))
-            .catch(err => console.log('ServiceWorker registration failed:', err));
+            .then(registration => {
+                console.log('ServiceWorker registration successful:', registration.scope);
+            })
+            .catch(err => {
+                console.log('ServiceWorker registration failed:', err);
+            });
     }
 
     // --- 2. AMBIL DATA BERITA ---
@@ -15,8 +19,8 @@ window.addEventListener('DOMContentLoaded', () => {
     // --- 3. LOGIKA NAVIGASI HALAMAN ---
     setupPageNavigation();
     
-    // --- 4. (BARU) LOGIKA POPUP PDF ---
-    setupPdfPopup();
+    // --- 4. LOGIKA POPUP PDF (TIDAK DIGUNAKAN LAGI) ---
+    // setupPdfPopup(); // Dihapus karena tombol diganti link biasa
 
 });
 
@@ -34,7 +38,7 @@ function fetchNews() {
             data.forEach(berita => {
                 const newsCard = document.createElement('div');
                 newsCard.className = 'news-card';
-                newsCard.innerHTML = `<img src="${berita.gambar}" alt="${berita.judul}"><h3>${berita.judul}</h3>`;
+                newsCard.innerHTML = `<img src="${berita.thumbnail_url}" alt="${berita.judul}"><h3>${berita.judul}</h3>`; // Menggunakan thumbnail_url
                 newsContainer.appendChild(newsCard);
             });
         })
@@ -62,40 +66,14 @@ function setupPageNavigation() {
         link.addEventListener('click', (event) => {
             event.preventDefault(); 
             const targetPage = link.dataset.page;
-            if (!document.getElementById(targetPage)) return;
+            if (!document.getElementById(targetPage)) {
+                console.warn(`Halaman "${targetPage}" belum dibuat.`);
+                return;
+            }
             navigateTo(targetPage);
             updateActiveNav(targetPage);
         });
     });
 
     navigateTo('beranda-page');
-}
-
-// (BARU) Fungsi untuk mengatur logika popup
-function setupPdfPopup() {
-    const openButton = document.getElementById('open-guide-button');
-    const closeButton = document.getElementById('close-guide-button');
-    const pdfPopup = document.getElementById('pdf-popup');
-
-    if (!openButton || !closeButton || !pdfPopup) {
-        console.error('Elemen popup tidak ditemukan!');
-        return;
-    }
-
-    // Tampilkan popup saat tombol "Panduan" diklik
-    openButton.addEventListener('click', () => {
-        pdfPopup.classList.remove('hidden');
-    });
-
-    // Sembunyikan popup saat tombol "Close" (X) diklik
-    closeButton.addEventListener('click', () => {
-        pdfPopup.classList.add('hidden');
-    });
-
-    // Sembunyikan popup saat area gelap di luar konten diklik
-    pdfPopup.addEventListener('click', (event) => {
-        if (event.target === pdfPopup) {
-            pdfPopup.classList.add('hidden');
-        }
-    });
 }
