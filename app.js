@@ -1,27 +1,14 @@
-// File: app.js
-
 window.addEventListener('DOMContentLoaded', () => {
-
-    // --- 1. REGISTRASI SERVICE WORKER ---
+    // --- Inisialisasi semua modul ---
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-                console.log('ServiceWorker registration successful:', registration.scope);
-            })
-            .catch(err => {
-                console.log('ServiceWorker registration failed:', err);
-            });
+            .then(reg => console.log('ServiceWorker registration successful'))
+            .catch(err => console.log('ServiceWorker registration failed:', err));
     }
-
-    // --- 2. AMBIL DATA BERITA ---
     fetchNews();
-
-    // --- 3. LOGIKA NAVIGASI HALAMAN ---
     setupPageNavigation();
-    
-    // --- 4. LOGIKA POPUP PDF (TIDAK DIGUNAKAN LAGI) ---
-    // setupPdfPopup(); // Dihapus karena tombol diganti link biasa
-
+    setupAdminAuth();
+    setupBeritaForm();
 });
 
 // --- FUNGSI-FUNGSI ---
@@ -35,10 +22,17 @@ function fetchNews() {
     fetch('/api/berita')
         .then(response => response.json())
         .then(data => {
+            if (!Array.isArray(data)) {
+                // Jika data bukan array, tampilkan pesan error dan hentikan
+                console.error('Data fetched is not an array:', data);
+                newsContainer.innerHTML = '<p>Gagal memuat berita (format data salah).</p>';
+                return;
+            }
             data.forEach(berita => {
                 const newsCard = document.createElement('div');
                 newsCard.className = 'news-card';
-                newsCard.innerHTML = `<img src="${berita.thumbnail_url}" alt="${berita.judul}"><h3>${berita.judul}</h3>`; // Menggunakan thumbnail_url
+                // Menggunakan thumbnail_url dari database
+                newsCard.innerHTML = `<img src="${berita.thumbnail_url}" alt="${berita.judul}"><h3>${berita.judul}</h3>`;
                 newsContainer.appendChild(newsCard);
             });
         })
@@ -54,22 +48,28 @@ function setupPageNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
 
     function navigateTo(pageId) {
-        pages.forEach(page => page.classList.toggle('hidden', page.id !== pageId));
+        pages.forEach(page => {
+            page.classList.toggle('hidden', page.id !== pageId);
+        });
         window.scrollTo(0, 0);
     }
 
     function updateActiveNav(targetPage) {
-        navItems.forEach(item => item.classList.toggle('active', item.dataset.page === targetPage));
+        navItems.forEach(item => {
+            item.classList.toggle('active', item.dataset.page === targetPage);
+        });
     }
 
     pageLinks.forEach(link => {
         link.addEventListener('click', (event) => {
             event.preventDefault(); 
             const targetPage = link.dataset.page;
+            
             if (!document.getElementById(targetPage)) {
                 console.warn(`Halaman "${targetPage}" belum dibuat.`);
                 return;
             }
+
             navigateTo(targetPage);
             updateActiveNav(targetPage);
         });
@@ -78,7 +78,6 @@ function setupPageNavigation() {
     navigateTo('beranda-page');
 }
 
-// (BARU) Fungsi untuk otentikasi PIN admin
 function setupAdminAuth() {
     const openBtn = document.getElementById('open-admin-berita-button');
     const closeBtn = document.getElementById('close-pin-button');
@@ -87,7 +86,7 @@ function setupAdminAuth() {
     const pinInput = document.getElementById('pin-input');
     const pinError = document.getElementById('pin-error');
     
-    if (!openBtn || !pinPopup || !closeBtn || !pinForm) return;
+    if (!openBtn || !pinPopup || !closeBtn || !pinForm || !pinInput || !pinError) return;
 
     const correctPin = "123456";
 
@@ -106,21 +105,37 @@ function setupAdminAuth() {
         e.preventDefault();
         if (pinInput.value === correctPin) {
             pinPopup.classList.add('hidden');
-            // Navigasi ke halaman admin berita setelah PIN benar
-            document.querySelector('.page-link[data-page="admin-berita-page"]').click();
+            
+            // Cari link navigasi ke halaman admin berita dan simulasikan klik
+            const adminBeritaLink = document.querySelector('.page-link[data-page="admin-berita-page"]');
+            if (adminBeritaLink) {
+                 // Navigasi manual karena admin-berita-page tidak ada di bottom nav
+                const pages = document.querySelectorAll('.page');
+                pages.forEach(page => {
+                    page.classList.toggle('hidden', page.id !== 'admin-berita-page');
+                });
+                window.scrollTo(0, 0);
+            }
         } else {
             pinError.classList.remove('hidden');
             pinInput.select();
         }
     });
+
+    // Sembunyikan popup saat area gelap di luar konten diklik
+    pinPopup.addEventListener('click', (event) => {
+        if (event.target === pinPopup) {
+            pinPopup.classList.add('hidden');
+        }
+    });
 }
 
-// (BARU) Fungsi untuk form berita (preview gambar)
 function setupBeritaForm() {
+    const beritaForm = document.getElementById('berita-form');
     const thumbnailInput = document.getElementById('thumbnail');
     const thumbnailPreview = document.getElementById('thumbnail-preview');
 
-    if (!thumbnailInput || !thumbnailPreview) return;
+    if (!beritaForm || !thumbnailInput || !thumbnailPreview) return;
 
     thumbnailInput.addEventListener('change', () => {
         const file = thumbnailInput.files[0];
@@ -131,11 +146,13 @@ function setupBeritaForm() {
                 thumbnailPreview.classList.remove('hidden');
             }
             reader.readAsDataURL(file);
+        } else {
+            thumbnailPreview.src = '#';
+            thumbnailPreview.classList.add('hidden');
         }
     });
 
-    // Logika submit form akan ditambahkan di sini nanti
-    document.getElementById('berita-form').addEventListener('submit', (e) => {
+    beritaForm.addEventListener('submit', (e) => {
         e.preventDefault();
         alert('Fitur simpan berita belum terhubung ke backend!');
         // Nanti di sini kita akan panggil fungsi upload gambar dan simpan data
