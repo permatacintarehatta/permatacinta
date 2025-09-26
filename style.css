@@ -146,14 +146,12 @@ section {
     pointer-events: none;
 }
 
-/* REVISI: Mengubah layout grid menjadi selalu 3 kolom */
+/* REVISI: Mengubah layout grid menjadi selalu 2 kolom */
 .news-grid-container {
     display: grid;
     gap: 1rem;
     grid-template-columns: repeat(2, 1fr); /* Selalu 2 kolom */
 }
-
-/* BLOK @media untuk .news-grid-container DIHAPUS */
 
 
 /* --- Layanan & Publikasi --- */
@@ -553,13 +551,16 @@ section {
     padding-top: 0;
 }
 
+/* REVISI: Penyesuaian untuk tampilan gambar artikel */
 .article-image {
-    width: calc(100% + 2rem);
-    margin-left: -1rem;
-    margin-top: -1rem;
+    width: calc(100% - 2rem); /* Mengurangi lebar total agar ada padding di kanan-kiri */
+    margin-left: 1rem; /* Memberi jarak dari kiri */
+    margin-top: 1rem; /* Memberi jarak dari atas header */
     height: 250px;
     object-fit: cover;
     margin-bottom: 1rem;
+    border-radius: 12px; /* Membuat sudut membulat */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Menambahkan sedikit bayangan */
 }
 
 .article-title {
