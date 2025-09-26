@@ -77,3 +77,67 @@ function setupPageNavigation() {
 
     navigateTo('beranda-page');
 }
+
+// (BARU) Fungsi untuk otentikasi PIN admin
+function setupAdminAuth() {
+    const openBtn = document.getElementById('open-admin-berita-button');
+    const closeBtn = document.getElementById('close-pin-button');
+    const pinPopup = document.getElementById('pin-popup');
+    const pinForm = document.getElementById('pin-form');
+    const pinInput = document.getElementById('pin-input');
+    const pinError = document.getElementById('pin-error');
+    
+    if (!openBtn || !pinPopup || !closeBtn || !pinForm) return;
+
+    const correctPin = "123456";
+
+    openBtn.addEventListener('click', () => {
+        pinInput.value = '';
+        pinError.classList.add('hidden');
+        pinPopup.classList.remove('hidden');
+        pinInput.focus();
+    });
+
+    closeBtn.addEventListener('click', () => {
+        pinPopup.classList.add('hidden');
+    });
+
+    pinForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (pinInput.value === correctPin) {
+            pinPopup.classList.add('hidden');
+            // Navigasi ke halaman admin berita setelah PIN benar
+            document.querySelector('.page-link[data-page="admin-berita-page"]').click();
+        } else {
+            pinError.classList.remove('hidden');
+            pinInput.select();
+        }
+    });
+}
+
+// (BARU) Fungsi untuk form berita (preview gambar)
+function setupBeritaForm() {
+    const thumbnailInput = document.getElementById('thumbnail');
+    const thumbnailPreview = document.getElementById('thumbnail-preview');
+
+    if (!thumbnailInput || !thumbnailPreview) return;
+
+    thumbnailInput.addEventListener('change', () => {
+        const file = thumbnailInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                thumbnailPreview.src = e.target.result;
+                thumbnailPreview.classList.remove('hidden');
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Logika submit form akan ditambahkan di sini nanti
+    document.getElementById('berita-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Fitur simpan berita belum terhubung ke backend!');
+        // Nanti di sini kita akan panggil fungsi upload gambar dan simpan data
+    });
+}
