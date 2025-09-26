@@ -5,7 +5,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     const pages = document.querySelectorAll('.page');
     const navItems = document.querySelectorAll('.nav-item');
-    let previousPage = 'beranda-page'; // Untuk tombol kembali
+    let previousPage = 'beranda-page'; // Untuk tombol kembali dari halaman artikel
 
     // Fungsi untuk menampilkan halaman yang dipilih dan menyembunyikan yang lain
     function navigateTo(pageId) {
@@ -18,7 +18,10 @@ window.addEventListener('DOMContentLoaded', () => {
     // Fungsi untuk memperbarui status 'active' di navigasi bawah
     function updateActiveNav(targetPage) {
         navItems.forEach(item => {
-            item.classList.toggle('active', item.dataset.page === targetPage);
+            // Hanya perbarui jika item nav memiliki data-page (menghindari error)
+            if (item.dataset.page) {
+                item.classList.toggle('active', item.dataset.page === targetPage);
+            }
         });
     }
 
@@ -43,7 +46,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 data.forEach(berita => {
                     const newsCard = document.createElement('div');
                     newsCard.className = 'news-card';
-                    newsCard.dataset.id = berita.id; // Tambahkan ID untuk bisa diklik
+                    newsCard.dataset.id = berita.id;
                     newsCard.innerHTML = `<img src="${berita.thumbnail_url}" alt="${berita.judul}"><h3>${berita.judul}</h3>`;
                     newsContainer.appendChild(newsCard);
                 });
@@ -53,33 +56,29 @@ window.addEventListener('DOMContentLoaded', () => {
                 newsContainer.innerHTML = '<p>Gagal memuat berita.</p>';
             });
     }
-
+    
     // Mengambil semua berita untuk halaman "Semua Berita"
     async function fetchAllNews() {
         const container = document.getElementById('semua-berita-container');
         if (!container) return;
-        container.innerHTML = '<p>Memuat berita...</p>'; // Tampilkan pesan loading
+        container.innerHTML = '<p>Memuat berita...</p>';
 
         try {
             const response = await fetch('/api/berita');
+            if (!response.ok) throw new Error('Gagal mengambil data.');
             const data = await response.json();
             if (!Array.isArray(data)) throw new Error('Format data salah.');
 
-            container.innerHTML = ''; // Kosongkan container setelah data diterima
+            container.innerHTML = '';
             data.forEach(berita => {
-                const listItem = document.createElement('a');
-                listItem.className = 'list-item';
-                listItem.href = '#';
-                listItem.dataset.id = berita.id; // Tambahkan ID
-                listItem.innerHTML = `
-                    <img src="${berita.thumbnail_url}" class="list-item-thumbnail">
-                    <div class="text">
-                        <h3>${berita.judul}</h3>
-                        <p>${new Date(berita.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                    </div>
-                    <span class="material-symbols-outlined chevron">chevron_right</span>
+                const newsCard = document.createElement('div');
+                newsCard.className = 'news-card';
+                newsCard.dataset.id = berita.id;
+                newsCard.innerHTML = `
+                    <img src="${berita.thumbnail_url}" alt="${berita.judul}">
+                    <h3>${berita.judul}</h3>
                 `;
-                container.appendChild(listItem);
+                container.appendChild(newsCard);
             });
         } catch (error) {
             console.error('Error fetching all news:', error);
@@ -91,7 +90,7 @@ window.addEventListener('DOMContentLoaded', () => {
     async function fetchSingleNews(id) {
         const container = document.getElementById('baca-berita-container');
         if (!container) return;
-        container.innerHTML = '<p>Memuat artikel...</p>'; // Pesan loading
+        container.innerHTML = '<p>Memuat artikel...</p>';
 
         try {
             const response = await fetch(`/api/berita/${id}`);
@@ -114,7 +113,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
     function setupPageNavigation() {
         const pageLinks = document.querySelectorAll('.page-link');
 
@@ -128,7 +126,6 @@ window.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
                 
-                // Jika target adalah halaman 'semua-berita', panggil fungsinya
                 if (targetPage === 'semua-berita-page') {
                     fetchAllNews();
                 }
@@ -140,15 +137,12 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function setupNewsClickListeners() {
-        // Event listener untuk semua kartu berita (di Beranda atau di halaman Semua Berita)
         document.body.addEventListener('click', (e) => {
-            // .closest mencari elemen terdekat yang cocok dengan selector
-            const newsCard = e.target.closest('.news-card, .list-item[data-id]');
+            const newsCard = e.target.closest('.news-card[data-id]');
             
             if (newsCard && newsCard.dataset.id) {
                 e.preventDefault();
                 const articleId = newsCard.dataset.id;
-                // Simpan halaman saat ini sebagai halaman sebelumnya
                 previousPage = document.querySelector('.page:not(.hidden)').id;
                 
                 fetchSingleNews(articleId);
@@ -156,17 +150,129 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Event listener untuk tombol kembali di halaman artikel
         const backButton = document.getElementById('back-from-article-button');
         if(backButton) {
             backButton.addEventListener('click', () => {
-                navigateTo(previousPage); // Kembali ke halaman yang tersimpan
+                navigateTo(previousPage);
             });
         }
     }
 
-    function setupAdminAuth() { /* (Fungsi ini tetap sama, tidak ada perubahan) */ }
-    function setupBeritaForm() { /* (Fungsi ini tetap sama, tidak ada perubahan) */ }
+    function setupAdminAuth() {
+        const openBtn = document.getElementById('open-admin-berita-button');
+        const closeBtn = document.getElementById('close-pin-button');
+        const pinPopup = document.getElementById('pin-popup');
+        const pinForm = document.getElementById('pin-form');
+        const pinInput = document.getElementById('pin-input');
+        const pinError = document.getElementById('pin-error');
+        
+        if (!openBtn || !pinPopup || !closeBtn || !pinForm || !pinInput || !pinError) return;
+
+        const correctPin = "123456";
+
+        openBtn.addEventListener('click', () => {
+            pinInput.value = '';
+            pinError.classList.add('hidden');
+            pinPopup.classList.remove('hidden');
+            pinInput.focus();
+        });
+
+        closeBtn.addEventListener('click', () => {
+            pinPopup.classList.add('hidden');
+        });
+
+        pinForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (pinInput.value === correctPin) {
+                pinPopup.classList.add('hidden');
+                navigateTo('admin-berita-page');
+            } else {
+                pinError.classList.remove('hidden');
+                pinInput.select();
+            }
+        });
+
+        pinPopup.addEventListener('click', (event) => {
+            if (event.target === pinPopup) {
+                pinPopup.classList.add('hidden');
+            }
+        });
+    }
+
+    function setupBeritaForm() {
+        const beritaForm = document.getElementById('berita-form');
+        if (!beritaForm) return;
+
+        const thumbnailInput = document.getElementById('thumbnail');
+        const thumbnailPreview = document.getElementById('thumbnail-preview');
+        const submitButton = beritaForm.querySelector('button[type="submit"]');
+
+        thumbnailInput.addEventListener('change', () => {
+            const file = thumbnailInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    thumbnailPreview.src = e.target.result;
+                    thumbnailPreview.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                thumbnailPreview.src = '#';
+                thumbnailPreview.classList.add('hidden');
+            }
+        });
+
+        beritaForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = 'Menyimpan...';
+
+            try {
+                const judul = document.getElementById('judul').value;
+                const isi = document.getElementById('isi').value;
+                const file = thumbnailInput.files[0];
+
+                if (!file) throw new Error('Gambar thumbnail harus dipilih.');
+
+                const formData = new FormData();
+                formData.append('thumbnail', file);
+
+                const uploadResponse = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!uploadResponse.ok) throw new Error('Gagal mengupload gambar.');
+                const uploadResult = await uploadResponse.json();
+                const thumbnailUrl = uploadResult.url;
+
+                const beritaData = { judul, isi, thumbnailUrl };
+
+                const saveResponse = await fetch('/api/berita/tambah', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(beritaData),
+                });
+
+                if (!saveResponse.ok) throw new Error('Gagal menyimpan data berita.');
+
+                alert('Berita berhasil disimpan!');
+                beritaForm.reset(); 
+                thumbnailPreview.classList.add('hidden'); 
+                
+                navigateTo('admin-page');
+                fetchHomepageNews(); // Muat ulang berita di Beranda
+            } catch (error) {
+                console.error('Submit Error:', error);
+                alert(`Terjadi kesalahan: ${error.message}`);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+            }
+        });
+    }
 
 
     // =========================================================================
@@ -186,5 +292,5 @@ window.addEventListener('DOMContentLoaded', () => {
     setupNewsClickListeners();
 
     // Tampilkan halaman Beranda saat pertama kali dimuat
-    navigateTo('beranda-page');
+    navigateTo('berita-page');
 });
