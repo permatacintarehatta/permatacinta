@@ -146,11 +146,10 @@ section {
     pointer-events: none;
 }
 
-/* REVISI: Mengubah layout grid menjadi selalu 2 kolom */
 .news-grid-container {
     display: grid;
     gap: 1rem;
-    grid-template-columns: repeat(2, 1fr); /* Selalu 2 kolom */
+    grid-template-columns: repeat(2, 1fr);
 }
 
 
@@ -285,62 +284,44 @@ section {
     font-size: 1.5rem;
 }
 
-.item-list {
-    display: flex;
-    flex-direction: column;
+/* --- Styling Halaman Layanan (BARU) --- */
+.layanan-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
 }
 
-.list-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+.layanan-button {
     background-color: var(--card-background);
-    padding: 1rem;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    padding: 1rem 0.5rem;
+    text-align: center;
     text-decoration: none;
     color: var(--text-color);
-    transition: transform 0.2s;
-    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 110px; 
 }
 
-.list-item:hover {
-    transform: scale(1.02);
+.layanan-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-.list-item .icon {
-    font-size: 2rem;
+.layanan-button .material-symbols-outlined {
+    font-size: 2.5rem;
     color: var(--primary-color);
-    pointer-events: none;
 }
 
-.list-item .text {
-    flex-grow: 1;
-    pointer-events: none;
-}
-
-.list-item .text h3 {
-    font-size: 1rem;
-    margin-bottom: 0.2rem;
-}
-
-.list-item .text p {
+.layanan-button span {
+    font-weight: 500;
     font-size: 0.8rem;
-    color: var(--text-light);
-}
-
-.list-item .chevron {
-    color: var(--border-color);
-    pointer-events: none;
-}
-
-.list-item-thumbnail {
-    width: 80px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 8px;
-    flex-shrink: 0;
+    line-height: 1.2; 
 }
 
 
@@ -551,16 +532,15 @@ section {
     padding-top: 0;
 }
 
-/* REVISI: Penyesuaian untuk tampilan gambar artikel */
 .article-image {
-    width: calc(100% - 2rem); /* Mengurangi lebar total agar ada padding di kanan-kiri */
-    margin-left: 1rem; /* Memberi jarak dari kiri */
-    margin-top: 1rem; /* Memberi jarak dari atas header */
+    width: 100%;
+    margin-left: 0;
+    margin-top: 1rem;
     height: 250px;
     object-fit: cover;
     margin-bottom: 1rem;
-    border-radius: 12px; /* Membuat sudut membulat */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Menambahkan sedikit bayangan */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .article-title {
